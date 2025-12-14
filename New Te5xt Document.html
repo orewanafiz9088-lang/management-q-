@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ম্যানেজমেন্ট কুইজ টেস্ট - চূড়ান্ত ভার্সন (২২ প্রশ্ন)</title>
+    <style>
+        /* CSS Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            margin: 0;
+            color: #333;
+        }
+
+        .quiz-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            margin-top: 30px;
+        }
+
+        .quiz-title {
+            text-align: center;
+            color: #004085;
+            margin-bottom: 25px;
+            border-bottom: 4px solid #007bff;
+            padding-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #cce5ff;
+            border-radius: 12px;
+            background-color: #e9f7ff;
+            transition: all 0.4s ease;
+        }
+        
+        .question:hover {
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 60, 128, 0.1);
+        }
+
+        .question h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            margin-top: 10px;
+            padding: 15px;
+            border: 1px solid #b8daff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .options label:hover {
+            background-color: #d6eaff;
+            border-color: #007bff;
+        }
+
+        input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+            accent-color: #007bff;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            margin-top: 40px;
+            background-color: #ff9800; /* Orange color */
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #e68900;
+        }
+
+        /* --- Special Animation (Pulse) for Button --- */
+        .pulse {
+            box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 152, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+            }
+        }
+        /* ------------------------------------------- */
+
+        .results-container {
+            margin-top: 35px;
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #fdfd96; /* Light Yellow/Cream */
+            border: 3px dashed #ffc107;
+            display: none;
+        }
+
+        /* --- Special Animation (Bounce-In) for Results --- */
+        .results-container.show {
+            display: block;
+            animation: bounceIn 0.8s ease-out forwards;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        /* ------------------------------------------------- */
+
+        .results-container h2 {
+            text-align: center;
+            color: #d9534f;
+            margin-bottom: 20px;
+            font-size: 1.7em;
+        }
+        
+        .score-info {
+            text-align: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #1a75ff;
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 3px solid #1a75ff;
+            border-radius: 10px;
+            background-color: #eaf2ff;
+        }
+
+        .correct-answer {
+            background-color: #d4edda;
+            border-left: 6px solid #28a745;
+            padding: 12px;
+            margin-top: 8px;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .wrong-answer {
+            background-color: #f8d7da;
+            border-left: 6px solid #dc3545;
+            padding: 12px;
+            margin-top: 8px;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1 class="quiz-title">চূড়ান্ত ম্যানেজমেন্ট কুইজ টেস্ট (২২ প্রশ্ন)</h1>
+    <p style="text-align: center; color: #d9534f; font-size: 1.1em; font-weight: bold; padding: 10px; border: 1px dashed #d9534f;">সঠিক: +১ নম্বর | ভুল: -০.২৫ নম্বর | উত্তর না দিলে: ০ নম্বর</p>
+    <div id="quiz">
+        </div>
+    <button id="submit" class="submit-btn pulse">ফলাফল দেখুন এবং উত্তর জানুন</button>
+    <div id="results" class="results-container">
+        </div>
+</div>
+
+<script>
+    // JavaScript Logic
+    const quizData = [
+        // --- Management প্রশ্ন (1).pdf থেকে ---
+        {
+            question: "১। 'কর্মসূচি' কোন ধরনের পরিকল্পনা?",
+            options: ["স্থায়ী পরিকল্পনা", "মধ্যমেয়াদি পরিকল্পনা", "একার্থক পরিকল্পনা", "কৌশলগত পরিকল্পনা"],
+            correct: "একার্থক পরিকল্পনা"
+        },
+        {
+            question: "২। অনুসারীদের হতে বেশি কাজ আদায় করিয়ে নেওয়ার প্রক্রিয়া কোন নেতৃত্বে বিদ্যমান?",
+            options: ["পিতৃসুলভ নেতৃত্ব", "লাগামহীন নেতৃত্ব", "কর্মীকেন্দ্রিক নেতৃত্ব", "কর্মকেন্দ্রিক নেতৃত্ব"],
+            correct: "কর্মীকেন্দ্রিক নেতৃত্ব"
+        },
+        {
+            question: "৩। নিচের কোনটি সাংগঠনিক কাঠামো চিত্রে থাকে না?",
+            options: ["বিভাগ ও উপবিভাগের অবস্থান", "কর্মীদের স্তরভিত্তিক অবস্থান", "কর্মীদের কাজের লক্ষ্য", "ক্ষমতা প্রবাহ"],
+            correct: "কর্মীদের কাজের লক্ষ্য"
+        },
+        {
+            question: "৪। কোন ধরনের সমবায় সমিতিতে ব্যক্তি-সদস্য থাকতে পারে না?",
+            options: ["জাতীয় সমবায় সিমতি", "মিশ্র সমবায় সমিতি", "উৎপাদক সমবায় সমিতি", "ভোক্তা সমবায় সমিতি"],
+            correct: "জাতীয় সমবায় সিমতি"
+        },
+        {
+            question: "৫। নিচের কোনটি একমালিকানা ব্যবসায়ের সুবিধা নয়?",
+            options: ["সহজ পরিচালনা", "গোপনীয়তা রক্ষা", "অসীম দায়", "সহজ গঠন প্রণালি"],
+            correct: "অসীম দায়"
+        },
+        {
+            question: "৬। বৈজ্ঞানিক ব্যবস্থাপনার জনক কে?",
+            options: ["পিটার ড্রাকার", "হেনরি ফেয়ল", "ফ্রেডরিক ডব্লিউ টেইলর", "আশ্রহাম মাসলো"],
+            correct: "ফ্রেডরিক ডব্লিউ টেইলর"
+        },
+        {
+            question: "৭। ট্রেডিং কর্পোরেশন অব বাংলাদেশ কোন ধরনের প্রতিষ্ঠান?",
+            options: ["পাবলিক লিমিটেড কোম্পানি", "প্রাইভেট লিমিটেড কোম্পানি", "রাষ্ট্রীয় ব্যবসায়", "সমবায় সমিতি"],
+            correct: "রাষ্ট্রীয় ব্যবসায়"
+        },
+        {
+            question: "৮। 'কপিরাইট' কোন ধরনের সম্পত্তি?",
+            options: ["নগদ", "কৃত্রিম চলমান", "চলতি", "অস্পৃশ্য"],
+            correct: "অস্পৃশ্য"
+        },
+        {
+            question: "৯। পদমর্যাদা হতে যে নেতৃত্বের সৃষ্টি হয় তাকে বলে-",
+            options: ["আনুষ্ঠানিক নেতৃত্ব", "অনানুষ্ঠানিক নেতৃত্ব", "ইতিবাচক নেতৃত্ব", "নেতিবাচক নেতৃত্ব"],
+            correct: "আনুষ্ঠানিক নেতৃত্ব"
+        },
+        {
+            question: "১০। সমবায়ের সাফল্যের ভিত্তি কি?",
+            options: ["একতা", "সাম্য", "নৈকট্য", "বন্ধুত্ব"],
+            correct: "একতা"
+        },
+        {
+            question: "১১। নিচের কোনটি মূলধনঘন শিল্প?",
+            options: ["কৃষি", "তৈরি পোশাক", "ঔষধ", "খনি"],
+            correct: "খনি"
+        },
+        {
+            question: "১২। সমবায় সমিতির সর্বোচ্চ সদস্য সংখ্যা হলো-",
+            options: ["১০ জন", "৫০ জন", "কোনো সীমা নেই", "৯৯৯ জন"],
+            correct: "কোনো সীমা নেই" 
+        },
+        {
+            question: "১৩। সিটি কর্পোরেশন এলাকায় একমালিকানা ব্যবসায় পরিচালনার জন্য কোন ধরনের সনদ সংগ্রহ করতে হয়?",
+            options: ["ভ্যাট সার্টিফিকেট", "আয়কর সনদ", "নিবন্ধন সনদ", "ব্যবসায় লাইসেন্স"],
+            correct: "ব্যবসায় লাইসেন্স" 
+        },
+        {
+            question: "১৪। নিরপেক্ষ আচরণ ব্যবস্থাপনা কোন নীতির সমর্থক?",
+            options: ["শৃঙ্খলা", "বিকেন্দ্রীকরণ", "সাম্য", "নির্দেশনার ঐক্য"],
+            correct: "সাম্য"
+        },
+        {
+            question: "১৫। পণ্য সম্পর্কে কালগত বাধা দূর করে কোনটি?",
+            options: ["গুদামজাতকরণ", "পরিবহন", "উৎপাদন", "বাজারজাতকরণ"],
+            correct: "গুদামজাতকরণ"
+        },
+        {
+            question: "১৬। ব্যবসায়ের ভূষণ কোনটি?",
+            options: ["মূলধন", "সুনাম", "মুনাফা", "বিজ্ঞাপন"],
+            correct: "সুনাম"
+        },
+        // --- JU+JNU Management সাজেশন.pdf থেকে বাকি প্রশ্ন ---
+        {
+            question: "১৭। প্রমিতকরন (Standardization) বলতে বোঝায় কোনটি?",
+            options: ["পন্য বিভাজন", "পন্য নির্ধারণ", "পণ্য নির্দিষ্টকরুন", "পণ্যের মান নির্ধারণ"],
+            correct: "পণ্যের মান নির্ধারণ"
+        },
+        {
+            question: "১৮। বার্তা সংস্থা (News Agency) কোন শিল্পের অন্তর্ভুক্ত?",
+            options: ["প্রজনন", "উত্তোলন", "উৎপাদন", "সেবা"],
+            correct: "সেবা"
+        },
+        {
+            question: "১৯। কোনটি ব্যবসায়ীর বাহ্যিক পরিবেশের উপাদান নয়?",
+            options: ["প্রতিযোগী", "সরবরাহকারী", "নিয়ন্ত্রণ সংস্থা", "প্রতিষ্ঠানের সংস্কৃতি"],
+            correct: "প্রতিষ্ঠানের সংস্কৃতি"
+        },
+        {
+            question: "২০। নিচের কোনটি তৃতীয় বাটারশিয়ারি শিল্পের অন্তর্ভুক্ত?",
+            options: ["যৌগিক", "পরিবহন", "নির্মাণ", "সেবা"],
+            correct: "সেবা"
+        },
+        {
+            question: "২১। ক্ষতি ছাড়া ব্যবসায় পরিচালনা সম্ভব না হলে অংশীদারী ব্যবসায়ের কোন ধরনের বিলোপসাধন হবে?",
+            options: ["আদালত কর্তৃক", "বিজ্ঞপ্তি ধারা", "বাধ্যতামূলক", "বিশেষ ঘটনা সাপেক্ষে"],
+            correct: "বাধ্যতামূলক"
+        },
+        {
+            question: "২২। বাংলাদেশের প্রচলিত সীমিত অংশীদারি আইন কত সালের?",
+            options: ["১৯০৭", "১৯৩২", "১৮৭২", "১৮৪৪"],
+            correct: "১৯৩২"
+        }
+    ];
+    
+    // নেগেটিভ মার্কিং এর মান
+    const NEGATIVE_MARKING = 0.25; 
+
+    const quizElement = document.getElementById('quiz');
+    const resultsElement = document.getElementById('results');
+    const submitButton = document.getElementById('submit');
+
+    function buildQuiz() {
+        const output = [];
+
+        quizData.forEach((currentQuestion, questionNumber) => {
+            const options = [];
+
+            currentQuestion.options.forEach((option, index) => {
+                // Assign a Bengali letter for options: ক, খ, গ, ঘ
+                const letter = String.fromCharCode(2453 + index); 
+                options.push(
+                    `<label>
+                        <input type="radio" name="question${questionNumber}" value="${option}">
+                        ${letter}। ${option}
+                    </label>`
+                );
+            });
+
+            output.push(
+                `<div class="question">
+                    <h3>${questionNumber + 1}। ${currentQuestion.question}</h3>
+                    <div class="options">${options.join('')}</div>
+                </div>`
+            );
+        });
+
+        quizElement.innerHTML = output.join('');
+    }
+
+    function showResults() {
+        const answerContainers = quizElement.querySelectorAll('.options');
+        let numCorrect = 0;
+        let numWrong = 0;
+        let numSkipped = 0;
+        const resultsHtml = [];
+
+        quizData.forEach((currentQuestion, questionNumber) => {
+            const answerContainer = answerContainers[questionNumber];
+            const selector = `input[name=question${questionNumber}]:checked`;
+            const userAnswerElement = (answerContainer.querySelector(selector) || {}).value;
+
+            const questionText = currentQuestion.question;
+            const correctAnswer = currentQuestion.correct;
+            let resultFeedback = '';
+
+            // Check if answer is correct
+            if (!userAnswerElement) {
+                // Skipped
+                numSkipped++;
+                resultFeedback = `
+                    <div class="wrong-answer">
+                        উত্তর দেননি। (এই প্রশ্নের জন্য কোনো নম্বর কাটা হয়নি)
+                        <br>
+                        সঠিক উত্তর: <b>${correctAnswer}</b>
+                    </div>`;
+            } else if (userAnswerElement === correctAnswer) {
+                // Correct
+                numCorrect++;
+                resultFeedback = `<div class="correct-answer">সঠিক উত্তর! (+১ নম্বর)</div>`;
+            } else {
+                // Wrong
+                numWrong++;
+                resultFeedback = `
+                    <div class="wrong-answer">
+                        আপনার উত্তর: ${userAnswerElement}। (ভুল উত্তর: -${NEGATIVE_MARKING} নম্বর)
+                        <br>
+                        সঠিক উত্তর: <b>${correctAnswer}</b>
+                    </div>`;
+            }
+
+            resultsHtml.push(
+                `<div class="question">
+                    <h3>${questionNumber + 1}। ${questionText}</h3>
+                    ${resultFeedback}
+                </div>`
+            );
+        });
+
+        // Calculate Final Score
+        const finalScore = numCorrect - (numWrong * NEGATIVE_MARKING);
+        const maxScore = quizData.length;
+
+        // Display results
+        resultsElement.innerHTML = `
+            <h2>কুইজের সম্পূর্ণ ফলাফল</h2>
+            <div class="score-info">
+                মোট প্রশ্ন: ${maxScore} টি <br>
+                সঠিক উত্তর: <span style="color: green;">${numCorrect}</span> টি <br>
+                ভুল উত্তর: <span style="color: red;">${numWrong}</span> টি (-${(numWrong * NEGATIVE_MARKING).toFixed(2)} নম্বর) <br>
+                উত্তর দেওয়া হয়নি: ${numSkipped} টি <br>
+                <hr>
+                **মোট স্কোর (Negative Marking সহ): <span style="font-size: 1.5em; color: #ff006e;">${finalScore.toFixed(2)}</span> / ${maxScore}**
+            </div>
+            
+            ${resultsHtml.join('')}
+        `;
+        resultsElement.classList.add('show'); // Apply bounce-in animation
+        submitButton.style.display = 'none'; // Hide submit button after showing results
+    }
+
+    // Build the quiz immediately
+    buildQuiz();
+
+    // Event listener for the submit button
+    submitButton.addEventListener('click', showResults);
+</script>
+
+</body>
+</html>
